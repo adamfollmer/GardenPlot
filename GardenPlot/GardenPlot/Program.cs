@@ -10,13 +10,13 @@ namespace GardenPlot
     {
         static void Main(string[] args)
         {
-            PopulatedTestGarden run = new PopulatedTestGarden();
-            run.PopulateTestGarden();
-            Output output = new Output(run.testGarden);
-            //output.one(); WORKING
-            //output.two(); WORKING
-            //output.three(); WORKING
-            output.four();
+            string functionToRun = args[0];
+            string inputFilePath = args[1];
+            string outputFilePath = args[2];
+            Input input = new Input(inputFilePath);
+            input.AssignStringToPlots(input.TakeInput());
+            Output output = new Output(input.garden, outputFilePath);
+            output.RunSelectedFunction(functionToRun);
         }
     }
 }

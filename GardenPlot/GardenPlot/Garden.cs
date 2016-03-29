@@ -112,16 +112,30 @@ namespace GardenPlot
             int gardenPerimeter = (gardenWidth * 2) + (gardenHeight * 2);
             return gardenPerimeter;
         }
+        //public int CalculateOverlappedArea()
+        //{
+        //    int overlappedWidth = 0;
+        //    int overlappedHeight = 0;
+        //    int overlappedArea = 0;
+        //    foreach (Tuple<Plot,Plot> overlappedPair in overlappedPlots)
+        //    {
+        //        overlappedWidth = overlappedPair.Item1.UpperRight.Item1 - overlappedPair.Item2.XCoord;
+        //        overlappedHeight = overlappedPair.Item1.LowerLeft.Item2 - overlappedPair.Item2.YCoord;
+        //        overlappedArea += overlappedWidth * overlappedHeight;
+        //    }
+        //    return overlappedArea;
+        //}
         public int CalculateOverlappedArea()
         {
-            int overlappedWidth = 0;
-            int overlappedHeight = 0;
             int overlappedArea = 0;
-            foreach (Tuple<Plot,Plot> overlappedPair in overlappedPlots)
+            foreach (Tuple<Plot, Plot> overlappedPair in overlappedPlots)
             {
-                overlappedWidth = overlappedPair.Item1.UpperRight.Item1 - overlappedPair.Item2.XCoord;
-                overlappedHeight = overlappedPair.Item1.LowerLeft.Item2 - overlappedPair.Item2.YCoord;
-                overlappedArea += overlappedWidth * overlappedHeight;
+                int leftSide = Math.Max(overlappedPair.Item1.UpperLeft.Item1, overlappedPair.Item2.UpperLeft.Item1);
+                int rightSide = Math.Min(overlappedPair.Item1.LowerRight.Item1, overlappedPair.Item2.LowerRight.Item1);
+                int bottom = Math.Min(overlappedPair.Item1.LowerRight.Item2, overlappedPair.Item2.LowerRight.Item2);
+                int top = Math.Max(overlappedPair.Item1.UpperLeft.Item2, overlappedPair.Item2.UpperLeft.Item2);
+                int intersectedArea = (rightSide - leftSide) * (bottom - top);
+                overlappedArea += intersectedArea;
             }
             return overlappedArea;
         }
@@ -138,6 +152,12 @@ namespace GardenPlot
         {
             int totalArea = CalculateRawArea() - CalculateOverlappedArea();
             return totalArea;
+        }
+        public double CalculateFertilizerRequired()
+        {
+            double fertilizerRequired;
+            fertilizerRequired = CalculateRawMinusOverlappedArea() / 2;
+            return fertilizerRequired;
         }
 
     }

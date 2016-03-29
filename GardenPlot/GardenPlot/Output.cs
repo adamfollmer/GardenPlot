@@ -10,13 +10,35 @@ namespace GardenPlot
     class Output
     {
         Garden garden;
-        StreamWriter writer = new StreamWriter("C:\\GardenData\\gardenSpace.txt");
-        public Output (Garden Garden)
+        StreamWriter writer;
+        public Output (Garden garden, String outputFilePath)
         {
-            garden = Garden;
+            this.garden = garden;
+            writer = new StreamWriter(outputFilePath);
         }
-
-        public void one()
+        public void RunSelectedFunction(string outputFunction)
+        {
+            switch (outputFunction) {
+                case "1":
+                    One();
+                    break;
+                case "2":
+                    Two();
+                    break;
+                case "3":
+                    Three();
+                    break;
+                case "4":
+                    Four();
+                    break;
+                case "5":
+                    Five();
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void One()
         {
             garden.CheckOverlap();
             foreach(Tuple<Plot,Plot> overLappedSection in garden.OverlappedPlots)
@@ -25,7 +47,7 @@ namespace GardenPlot
             }
             writer.Close();
         }
-        public void two()
+        public void Two()
         {
             foreach (Plot plot in garden.TotalPlots)
             {
@@ -33,14 +55,28 @@ namespace GardenPlot
             }
             writer.Close();
         }
-        public void three()
+        public void Three()
         {
             writer.WriteLine("Total amount of fencing for the garden is " + garden.CalculateMinimumFencing() + " feet.");
             writer.Close();
         }
-        public void four()
+        public void Four()
         {
-
+            garden.CheckOverlap();
+            writer.WriteLine("Total amount of fertilizer required is " + garden.CalculateFertilizerRequired() + " bottles.");
+            writer.Close();
+        }
+        public void Five()
+        {
+            foreach(Plot plot in garden.TotalPlots)
+            {
+                writer.WriteLine("Rotating plot " + plot.PlotID + " by 90 degrees");
+                writer.WriteLine("Upper left coordinates: " + plot.UpperLeft);
+                writer.WriteLine("Lower left coordinates: " + plot.LowerLeft);
+                writer.WriteLine("Lower right coordinates: " + plot.LowerRight);
+                writer.WriteLine("Upper right coordinates: " + plot.UpperRight);
+            }
+            writer.Close();
         }
     }
 }
